@@ -56,12 +56,27 @@ def about():
     about.resizable(width=NO,height=NO)
     about.title('About')
 
-    Canvas_about = Canvas(about,width=1000,heigh=500,bg='light blue')
+    Canvas_about = Canvas(about,width=1000,heigh=500,bg='red')
     Canvas_about.place(x=0,y=0)
-    
-    
 
-                        
+    fondo_about = cargarImg('fondo_about.png')
+    Canvas_about.create_image(300,150,image=fondo_about)
+
+
+
+
+
+    def back():
+        about.withdraw()
+        root.deiconify()
+
+    btn_back = Button(Canvas_about,text="Back",font=('Arial',15,'bold'),bg='#EB1515',command=back)
+    btn_back.place(x=50,y=400)
+
+
+    about.mainloop()
+
+
 #### Ventana del test driver###
 def test_driver():
     off()
