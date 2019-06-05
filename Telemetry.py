@@ -192,9 +192,9 @@ def test_driver():
     ### Progessbar ##
     def llenar():
         global power
-        v = power 
-        if v>=800:
-            v =1000    
+        velocidad = power
+        if velocidad>=800:
+            velocidad =1000
         pwm['value'] = v//10
 
 
@@ -577,8 +577,6 @@ def test_driver():
 def quit_menu():
     root.destroy()
     off()
-    
-
 
 
 
