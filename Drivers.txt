@@ -1,0 +1,3 @@
+Hamilton,#1,28,alemán,365,360,5,1,2
+Vettel,#2,25,alemán,250,220,30,3,4
+Alonso,#3,33,español,125,90,35,4,5

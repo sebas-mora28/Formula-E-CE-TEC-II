@@ -320,13 +320,64 @@ void procesar(String input, String * output){
     analogWrite(EnA,0);
     digitalWrite(In3,LOW);
     digitalWrite(In4,LOW);
-    analogWrite(EnB,0);//Direccion 0
-    
-    
-    
-      
-   
+    analogWrite(EnB,0);//Direccion 
   }
+  else if (comando=="Celebration1"){
+    digitalWrite(In1,HIGH);
+    digitalWrite(In2,LOW);
+    analogWrite(EnA,950);
+    delay(3000);
+    digitalWrite(In3,HIGH);
+    digitalWrite(In4,LOW);
+    analogWrite(EnB,1023);
+    delay(3000);
+    digitalWrite(In1,LOW);
+    digitalWrite(In2,LOW);
+    analogWrite(EnA,0);
+    delay(500);
+    digitalWrite(In1,LOW);
+    digitalWrite(In2,HIGH);
+    analogWrite(EnA,950);
+    delay(1500);
+    digitalWrite(In3,LOW);
+    digitalWrite(In4,HIGH);
+    analogWrite(EnB,1023);
+    delay(1500);
+    digitalWrite(In1,LOW);
+    digitalWrite(In2,LOW);
+    analogWrite(EnA,0);
+    digitalWrite(In3,LOW);
+    digitalWrite(In4,LOW);
+    analogWrite(EnB,0);
+    
+  }
+
+  else if (comando =="Celebration2"){
+    digitalWrite(In1,LOW);
+    digitalWrite(In2,HIGH);
+    analogWrite(EnA,950);
+    delay(2000);
+    digitalWrite(In3,HIGH);
+    digitalWrite(In4,LOW);
+    analogWrite(EnB,1023);
+    delay(2500);
+    digitalWrite(In1,LOW);
+    digitalWrite(In2,LOW);
+    analogWrite(EnA,0);
+    delay(500);
+    digitalWrite(In1,HIGH);
+    digitalWrite(In2,LOW);
+    analogWrite(EnA,950);
+    delay(1500);
+    digitalWrite(In1,LOW);
+    digitalWrite(In2,LOW);
+    analogWrite(EnA,0);
+    digitalWrite(In3,LOW);
+    digitalWrite(In4,LOW);
+    analogWrite(EnB,0);
+  
+  }
+  
     /**
      * ## AGREGAR COMPARACIONES PARA COMANDOS SIN VALOR
      * EJEM: else if (comando == CIRCLE) {

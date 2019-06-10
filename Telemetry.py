@@ -1,7 +1,7 @@
 about_text = """
 TECNOLOGICO DE COSTA RICA 
 
-Ingenieria en Computadores 
+Ingeniería en Computadores 
 Taller de programación
 
     Estudiantes: 
@@ -11,12 +11,11 @@ Santiago Brenes Torres
     Profesor: 
 Pedro Gutiérrez García
 
-
-Grupo 03, I semestre 2018
+Grupo 03, I semestre 2019
 
     Costa Rica
     
-    versión 1.0.0
+    versión 2.0.0
 """
 
 from tkinter import *  # tk()
@@ -28,10 +27,8 @@ import threading  # Thread
 import winsound  # Reproducir musica
 from tkinter import messagebox
 
-global Driver1,Driver2,Car1,Car2
-Driver1,Driver2,Car1,Car2 = False,False,False,False
-
-
+global Driver1, Driver2, Car1, Car2
+Driver1, Driver2, Car1, Car2 = False, False, False, False
 
 # Ventana del menu principal
 root = Tk()
@@ -62,6 +59,7 @@ image_quit = cargarImg('Quit.png')
 
 
 def cargar_cancion(Nombre):
+    return
     # Funcion para cargar canciones del juego
     winsound.PlaySound(Nombre, winsound.SND_ASYNC + winsound.SND_LOOP)
 
@@ -74,44 +72,112 @@ def off():
 cargar_cancion('menu_song.wav')
 
 
-def drivers_cars():
-    root.withdraw()
-    drivers_cars = Toplevel()
-    drivers_cars.minsize(1000, 500)
-    drivers_cars.resizable(width=NO, height=NO)
-    drivers_cars.title('Drivers and Cars')
+def drivers_window():
+    drivers = Toplevel()
+    drivers.minsize(1500, 800)
+    drivers.resizable(width=NO, height=NO)
+    drivers.title('Drivers')
 
-    Canvas_drivers_cars = Canvas(drivers_cars, width=1000, height=500, bg='light blue')
-    Canvas_drivers_cars.place(x=0, y=0)
+    Canvas_drivers = Canvas(drivers, width=1500, height=800, bg='light blue')
+    Canvas_drivers.place(x=0, y=0)
 
-    fondo_drivers_cars = cargarImg('fondo_drivers_cars.png')
-    Canvas_drivers_cars.create_image(500,285,image=fondo_drivers_cars)
 
-    drivers_image = cargarImg('formula1_driver.png')
-    cars_image = cargarImg("formula1_car.png")
+    hamilton = cargarImg('Hamilton_png')
 
 
 
-    Canvas_drivers_cars.create_text(730, 90, text='Drivers', font=('Magneto',30), fill='#FFFFFF')
-    btn_drivers = Button(Canvas_drivers_cars, image=drivers_image)
-    btn_drivers.place(x=550, y=125)
 
-    Canvas_drivers_cars.create_text(250, 90, text='Cars', font=('Magneto', 30), fill='#FFFFFF')
-    btn_cars = Button(Canvas_drivers_cars, image=cars_image)
-    btn_cars.place(x=50, y=125)
+
+    def recorrer():
+        with open('Drivers.txt', 'r') as file:
+            lista = file.read().split('\n')
+            newlista = []
+            count = 0
+            while count < len(lista):
+                newlista += [lista[count].split(',')]
+                count += 1
+            file.close()
+            return newlista
+
+
+    print(recorrer())
+
+    newlista = recorrer()
+
 
 
 
 
     def back():
-        drivers_cars.withdraw()
+        drivers.withdraw()
+        drivers_cars_window()
+
+    btn_back = Button(Canvas_drivers, text='Back', command=back)
+    btn_back.place(x=500, y=500)
+
+    drivers.mainloop()
+
+
+def cars_window():
+    cars = Toplevel()
+    cars.minsize(1500, 800)
+    cars.resizable(width=NO, height=NO)
+    cars.title('Cars')
+
+    Canvas_cars = Canvas(cars, width=1500, height=800, bg='light blue')
+    Canvas_cars.place(x=0, y=0)
+
+    def back():
+        cars.withdraw()
+        drivers_cars_window()
+
+    btn_back = Button(Canvas_cars, text='Back', command=back)
+    btn_back.place(x=500, y=500)
+
+    cars.mainloop()
+
+
+def drivers_cars_window():
+    root.withdraw()
+    driverscars = Toplevel()
+    driverscars.minsize(1000, 500)
+    driverscars.resizable(width=NO, height=NO)
+    driverscars.title('Drivers and Cars')
+
+    Canvas_drivers_cars = Canvas(driverscars, width=1000, height=500, bg='light blue')
+    Canvas_drivers_cars.place(x=0, y=0)
+
+    background_drivers_cars = cargarImg('fondo_drivers_cars.png')
+    Canvas_drivers_cars.create_image(500, 285, image=background_drivers_cars)
+
+    drivers_image = cargarImg('formula1_driver.png')
+    cars_image = cargarImg("formula1_car.png")
+
+    Canvas_drivers_cars.create_text(730, 90, text='Drivers', font=('Magneto', 30), fill='#FFFFFF')
+    Canvas_drivers_cars.create_text(250, 90, text='Cars', font=('Magneto', 30), fill='#FFFFFF')
+
+    def start_drivers():
+        driverscars.withdraw()
+        drivers_window()
+
+    def start_cars():
+        driverscars.withdraw()
+        cars_window()
+
+    def back():
+        driverscars.withdraw()
         root.deiconify()
 
-    btn_back = Button(Canvas_drivers_cars,text='Back',font=('Arial',15,'bold'),command=back)
-    btn_back.place(x=50,y=425)
+    btn_back = Button(Canvas_drivers_cars, text='Back', font=('Arial', 15, 'bold'), command=back)
+    btn_back.place(x=50, y=425)
 
+    btn_cars = Button(Canvas_drivers_cars, image=cars_image, command=start_cars)
+    btn_cars.place(x=50, y=125)
 
-    drivers_cars.mainloop()
+    btn_drivers = Button(Canvas_drivers_cars, image=drivers_image, command=start_drivers)
+    btn_drivers.place(x=550, y=125)
+
+    driverscars.mainloop()
 
 
 def about():
@@ -125,9 +191,12 @@ def about():
     Canvas_about.place(x=0, y=0)
 
     fondo_about = cargarImg('fondo_about.png')
-    Canvas_about.create_image(300, 150, image=fondo_about)
+    foto_Sebastián = cargarImg('foto_sebastián.png')
 
-    Canvas_about.create_text(700, 200, text=about_text, font=('Arial', 12), justify=CENTER)
+    Canvas_about.create_image(300, 150, image=fondo_about)
+    Canvas_about.create_image(460, 150, image=foto_Sebastián)
+
+    Canvas_about.create_text(780, 230, text=about_text, font=('Arial', 13, 'bold'), justify=CENTER)
 
     def back():
         about.withdraw()
@@ -139,23 +208,22 @@ def about():
     about.mainloop()
 
 
-
 def choose():
     root.withdraw()
     choose = Toplevel()
-    choose.minsize(1000,600)
+    choose.minsize(1000, 600)
     choose.resizable(width=NO, height=NO)
     choose.title('Choose')
 
     Canvas_choose = Canvas(choose, width=1000, height=600, bg='light blue')
-    Canvas_choose.place(x=0,y=0)
+    Canvas_choose.place(x=0, y=0)
 
     fondo = cargarImg('Fondo_choose.png')
-    Canvas_choose.create_image(500,300,image=fondo)
+    Canvas_choose.create_image(500, 300, image=fondo)
 
     def Driver(Type):
-        global Driver1,Driver2
-        if (Type):
+        global Driver1, Driver2
+        if Type:
             Driver1 = True
             Driver2 = False
         else:
@@ -163,23 +231,23 @@ def choose():
             Driver1 = False
 
     def Car(Type):
-        global Car1,Car2
-        if (Type):
-            Car1  =True
-            Car2=False
+        global Car1, Car2
+        if Type:
+            Car1 = True
+            Car2 = False
         else:
-            Car2= True
-            Car1= False
+            Car2 = True
+            Car1 = False
 
-    Canvas_choose.create_text(500,50,text='Choose your driver',font=('Magneto',25),fill='#000000')
+    Canvas_choose.create_text(500, 50, text='Choose your driver', font=('Magneto', 25), fill='#000000')
     Canvas_choose.create_text(500, 350, text='Choose your car', font=('Magneto', 25), fill='#000000')
     Driver1_image = cargarImg('Hamilton.png')
-    btn_driver1 = Button(Canvas_choose,image=Driver1_image,command= lambda :Driver(True))
-    btn_driver1.place(x=250,y=100)
+    btn_driver1 = Button(Canvas_choose, image=Driver1_image, command=lambda: Driver(True))
+    btn_driver1.place(x=250, y=100)
 
     Driver2_image = cargarImg('Charles.png')
-    btn_driver2 = Button(Canvas_choose,image=Driver2_image, command= lambda :Driver(False))
-    btn_driver2.place(x=630,y=100)
+    btn_driver2 = Button(Canvas_choose, image=Driver2_image, command=lambda: Driver(False))
+    btn_driver2.place(x=630, y=100)
 
     Car1_image = cargarImg('Car1.png')
     btn_car1 = Button(Canvas_choose, image=Car1_image, command=lambda: Car(True))
@@ -189,30 +257,77 @@ def choose():
     btn_car2 = Button(Canvas_choose, image=Car2_image, command=lambda: Car(False))
     btn_car2.place(x=600, y=400)
 
-
     def start():
         if (Driver1 or Driver2) and (Car1 or Car2):
             choose.withdraw()
             test_driver()
         else:
-            messagebox.showinfo('Vuelve a elegir','Debes elegir tanto un vehículo com un piloto para continuar')
+            messagebox.showinfo('Vuelve a elegir', 'Debes elegir tanto un vehículo como un piloto para continuar')
 
-
-
-    btn_start = Button(Canvas_choose, text='Start', font=('Arial', 12), command=start)
+    btn_start = Button(Canvas_choose, text='Start', font=('Magneto', 15), relief='sunken', command=start)
     btn_start.place(x=900, y=500)
 
     def back():
-        global Car1,Car2,Driver1,Driver2
-        Car1,Car2,Driver1,Driver2=False,False,False,False
+        global Car1, Car2, Driver1, Driver2
+        Car1, Car2, Driver1, Driver2 = False, False, False, False
         choose.withdraw()
         root.deiconify()
 
-    btn_back = Button(Canvas_choose,text='Back',font=('Arial',12),command=back)
-    btn_back.place(x=30,y=500)
-
+    btn_back = Button(Canvas_choose, text='Back', font=('Magneto', 15), relief='sunken', command=back)
+    btn_back.place(x=30, y=500)
 
     choose.mainloop()
+
+
+def command_display():
+    command = Toplevel()
+    command.minsize(500, 500)
+    command.resizable(width=NO, height=NO)
+    command.title('Commands')
+
+    Canvas_commands = Canvas(command, width=500, height=500)
+    Canvas_commands.place(x=0, y=0)
+
+    background = cargarImg('background_command.png')
+
+    Canvas_commands.create_image(300, 400, image=background)
+    Canvas_commands.create_text(250, 50, text="Commands", font=('Magneto', 20))
+
+    myCar = NodeMCU()
+    myCar.start()
+
+    def send_command(command):
+        if command == 'Circle':
+            myCar.send(command + ';')
+        if command == 'ZigZag':
+            myCar.send(command + ';')
+        if command == 'Infinite':
+            myCar.send(command + ';')
+        if command == 'Especial':
+            myCar.send(command + ';')
+
+    def back():
+        command.withdraw()
+        test_driver()
+
+    btn_back = Button(Canvas_commands, text='Back', font=('Magneto', 15), command=back)
+    btn_back.place(x=20, y=400)
+
+    btn_circle = Button(Canvas_commands, text='Circle', font=('Magneto', 15), relief='sunken', borderwidth=3, command=lambda: send_command('Circle'))
+    btn_circle.place(x=80, y=120)
+
+    btn_zigzag = Button(Canvas_commands, text='ZigZag', font=('Magneto', 15), relief='sunken', borderwidth=3, command=lambda: send_command('ZigZag'))
+    btn_zigzag.place(x=278, y=120)
+
+    btn_infinite = Button(Canvas_commands, text='Infnite', font=('Magneto', 15), relief='sunken', borderwidth=3, command=lambda: send_command('Infinite'))
+    btn_infinite.place(x=70, y=230)
+
+    btn_especial = Button(Canvas_commands, text='Especial', font=('Magneto', 15),relief='sunken', borderwidth=3, command=lambda: send_command('Especial'))
+    btn_especial.place(x=270, y=230)
+
+
+
+    command.mainloop()
 
 
 #### Ventana del test driver###
@@ -229,14 +344,6 @@ def test_driver():
 
     fondo = cargarImg('fondo_carro.png')
     Canvas_test.create_image(600, 350, image=fondo)
-
-    def Intermitente(Swap):
-        # Funcion para cargar canciones del juego
-        if (Swap):
-            winsound.PlaySound('Intermitente.wav', winsound.SND_ASYNC + winsound.SND_LOOP)
-        else:
-            winsound.PlaySound(None, winsound.SND_ASYNC + winsound.SND_LOOP)
-            cargar_cancion('test_song2.wav')
 
     ### Imagenes para la interfaz###
     Car = cargarImg('Car.png')
@@ -274,14 +381,12 @@ def test_driver():
     sun_brightless = cargarImg('sun_bright2.png')
     sun_bright = cargarImg('sun_bright.png')
 
-
     driver1 = cargarImg('Hamilton_.png')
     driver2 = cargarImg('Charles_.png')
 
     car1 = cargarImg('Car1_.png')
     car2 = cargarImg('Car2_.png')
     tabla = cargarImg('Tabla.png')
-
 
     ## Imagenes del carro con los diferentes comandos existentes ##
     Canvas_test.create_image(150, 200, image=Car, tags=['No_commands', 'Car'], state=NORMAL)
@@ -324,15 +429,13 @@ def test_driver():
     Canvas_test.create_image(817, 180, image=sun_brightless, tags=['sun_brightless'], state=NORMAL)
     Canvas_test.create_image(817, 180, image=sun_bright, tags=['sun_bright'], state=HIDDEN)
 
-
-    #Imagenes del personaje y vehículos elejidos
+    # Imagenes del personaje y vehículos elejidos
     Canvas_test.create_image(1000, 600, image=tabla)
-    Canvas_test.create_image(883,600,image=driver1,tags=['Hamilton','Drivers'],state=HIDDEN)
+    Canvas_test.create_image(883, 600, image=driver1, tags=['Hamilton', 'Drivers'], state=HIDDEN)
     Canvas_test.create_image(883, 600, image=driver2, tags=['Charles', 'Drivers'], state=HIDDEN)
 
-    Canvas_test.create_image(1053,600,image=car1,tags=['Car1','Cars'],state=HIDDEN)
-    Canvas_test.create_image(1054,601, image=car2, tags=['Car2', 'Cars'], state=HIDDEN)
-
+    Canvas_test.create_image(1053, 600, image=car1, tags=['Car1', 'Cars'], state=HIDDEN)
+    Canvas_test.create_image(1054, 601, image=car2, tags=['Car2', 'Cars'], state=HIDDEN)
 
     ## Llamado del thread del WI-Fi cliente que permite enviar los comandos desde este archivo.
     myCar = NodeMCU()
@@ -352,23 +455,18 @@ def test_driver():
     front = True
     blink = True
 
-
     def insert_character():
-        global Car1,Car2,Driver1,Driver2
-        print(Driver1,Driver2)
+        global Car1, Car2, Driver1, Driver2
         if Driver1:
-            Canvas_test.itemconfig('Hamilton',state=NORMAL)
+            Canvas_test.itemconfig('Hamilton', state=NORMAL)
         if Driver2:
-            Canvas_test.itemconfig('Charles',state=NORMAL)
+            Canvas_test.itemconfig('Charles', state=NORMAL)
         if Car1:
-            Canvas_test.itemconfig('Car1',state=NORMAL)
+            Canvas_test.itemconfig('Car1', state=NORMAL)
         if Car2:
-            Canvas_test.itemconfig('Car2',state=NORMAL)
-
-
+            Canvas_test.itemconfig('Car2', state=NORMAL)
 
     insert_character()
-
 
     ### Progessbar ##
     def llenar():
@@ -472,10 +570,9 @@ def test_driver():
             Canvas_test.itemconfig('bright', state=NORMAL)
 
     """Inicio de thread para el comando sense"""
-    #sense_thread = threading.Thread(target=sense)
-    #sense_thread.start()
 
-
+    # sense_thread = threading.Thread(target=sense)
+    # sense_thread.start()
 
     ############# Potencia del motor #################
 
@@ -537,16 +634,16 @@ def test_driver():
         """Funcnion que reconoce la tecla que dejó de ser presionada para llamar al thread correspondiente"""
         global press_forward, press_back, moving, moving
         key = event.char
-        if (key == 'w'):
-            if (moving):
+        if key == 'w':
+            if moving:
                 return
             else:
                 moving = True
                 press_forward = False
                 deceleration_forward = threading.Thread(target=forward_decrease)
                 deceleration_forward.start()
-        if (key == "s"):
-            if (moving):
+        if key == "s":
+            if moving:
                 print('Entra')
                 return
             else:
@@ -680,7 +777,6 @@ def test_driver():
                 blink = True
                 blink_press = False
                 flag_blink_right = False
-                Intermitente(True)
             else:
                 print('light left off')
                 myCar.send('ll:0;')
@@ -688,7 +784,6 @@ def test_driver():
                 blink = False
                 blink_press = True
                 flag_blink_right = True
-                Intermitente(False)
         elif (key == "e" and flag_blink_right):
             if blink_press:
                 print("light right on")
@@ -697,32 +792,49 @@ def test_driver():
                 blink = True
                 blink_press = False
                 flag_blink_left = False
-                Intermitente(True)
             else:
                 print("light right off")
-                myCar.send('lr:0')
+                myCar.send('lr:0;')
                 Canvas_test.itemconfig('blink_right', state=HIDDEN)
                 blink = False
                 blink_press = True
                 flag_blink_left = True
-                Intermitente(False)
         else:
             print("A blinking light is already on")
+
+
+    def celebration():
+        global Driver1, Driver2
+        if Driver1:
+            myCar.send('Celebration1;')
+        if Driver2:
+            myCar.send('Celebration2;')
 
     test.bind('q', lights)
     test.bind('e', lights)
 
+    def commands():
+        test.destroy()
+        command_display()
+
     def volver_menu():
         global Car1, Car2, Driver1, Driver2
-        Car1,Car2,Driver1,Driver2= False,False,False,False
+        Car1, Car2, Driver1, Driver2 = False, False, False, False
         myCar.loop = False
-        cargar_cancion('Cancion1.wav')
         off()
+        cargar_cancion('menu_song.wav')
         test.withdraw()
         root.deiconify()
 
-    btn_back = Button(Canvas_test, text='Back', font=('Arial', 15), fg='#000000', command=volver_menu, width=5)
+    btn_back = Button(Canvas_test, text='Back', font=('Magneto', 15), fg='#000000', relief='sunken',
+                      command=volver_menu, width=5)
     btn_back.place(x=50, y=600)
+
+    btn_commands = Button(Canvas_test, text='Commands', font=('Magneto', 16), relief='sunken', command=commands)
+    btn_commands.place(x=1020, y=470)
+
+    btn_celebration = Button(Canvas_test, text='Celebration', font=('Magneto', 16), relief='sunken', command=celebration)
+    btn_celebration.place(x=830, y=470)
 
     test.mainloop()
 
@@ -738,7 +850,7 @@ btn_test_driver.place(x=79, y=177)
 btn_about = Button(Canvas_menu, image=image_about, bg='black', fg='black', command=about)
 btn_about.place(x=483, y=177)
 
-btn_drivers_cars = Button(Canvas_menu, image=image_drivers, bg='black', fg='black', command=drivers_cars)
+btn_drivers_cars = Button(Canvas_menu, image=image_drivers, bg='black', fg='black', command=drivers_cars_window)
 btn_drivers_cars.place(x=772, y=177)
 
 btn_drivers = Button(Canvas_menu, image=image_quit, bg='black', fg='black', command=quit_menu)
