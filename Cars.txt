@@ -1,0 +1,10 @@
+Auto7.png,Audi,Modelo,2019,574
+Auto3.png,Ferrari,Modelo,2019,521
+Auto9.png,BMW,Modelo,2019,364
+Auto8.png,Maserati,Modelo,2019,362
+Auto5.png,Jaguar,TX-201,2019,324
+Auto1.png,Chevrolet,AltoCampo,2019,250
+Auto6.png,Renault,Modelo,2019,245
+Auto10.png,Lexus, Modelo,2019,475
+Auto8.png,Mercedez,Modelo,2019,125
+Auto2.png,Toyota,Modelo,2019,124

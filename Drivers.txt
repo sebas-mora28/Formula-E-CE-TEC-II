@@ -1,3 +1,10 @@
-Hamilton,#1,28,alemán,365,360,5,1,2
-Vettel,#2,25,alemán,250,220,30,3,4
-Alonso,#3,33,español,125,90,35,4,5
+Ocon.png,Juan,hondureño,36,8,214,233
+Alonso.png,Alonso,español,40,54,254,233
+Ricciardo.png,Sebastian ,brasileño,28,5,741,243
+Hamilton_driver.png,Hamilton,alemán,26,1,200,254
+Max.png,Max,sueco,28,3,240,270
+Vettel.png,Vettel,suizo,34,2,240,270
+Vandoorne.png,Oscar Arias,francés,35,9,251,352
+Kimi.png,Kimi,frances,28,8,231,412
+Bottas.png,Bottas,italiano,23,4,631,412
+Pérez.png,Pérez,mexicano,23,7,245,632

@@ -27,8 +27,25 @@ import threading  # Thread
 import winsound  # Reproducir musica
 from tkinter import messagebox
 
-global Driver1, Driver2, Car1, Car2
+global Driver1, Driver2, Car1, Car2, list_drivers,RGP,REP,descendiente, ascendiente,indice,newlista, newlista_cars, lista_cars, logo_running, bwm_logo, mercedes_logo, audi_logo, ascendiente_cars, descendiente_cars
 Driver1, Driver2, Car1, Car2 = False, False, False, False
+newlista=[]
+list_drivers = []
+RGP = True
+REP = True
+ascendiente= True
+descendiente= True
+indice = 6
+newlista_cars = []
+lista_cars = []
+logo_running = True
+bmw_logo = False
+mercedes_logo= True
+audi_logo = False
+ascendiente_cars = True
+descendiente_cars = True
+
+
 
 # Ventana del menu principal
 root = Tk()
@@ -59,7 +76,6 @@ image_quit = cargarImg('Quit.png')
 
 
 def cargar_cancion(Nombre):
-    return
     # Funcion para cargar canciones del juego
     winsound.PlaySound(Nombre, winsound.SND_ASYNC + winsound.SND_LOOP)
 
@@ -67,72 +83,560 @@ def cargar_cancion(Nombre):
 def off():
     # Funcion que apaga la cancion una vez que entre a cualquiera de las demas pantallas
     winsound.PlaySound(None, winsound.SND_ASYNC + winsound.SND_LOOP)
-
-
 cargar_cancion('menu_song.wav')
+
+
+bmw_logo_ = cargarImg('bmw_logo.png')
+mercedes_logo_ = cargarImg('mercedes_logo.png')
+audi_logo_ = cargarImg('Audi_logo.png')
+Canvas_menu.create_text(1300, 20, text='Season:', font=('Arial', 15), fill='white')
+Canvas_menu.create_text(1300, 40, text='2019',  font=('Arial', 15), fill='white')
+Canvas_menu.create_text(1300, 100, text='Indice ganador:', font=('Arial', 15), fill='white')
+Canvas_menu.create_text(1300, 125, text='',  font=('Arial', 15), fill='white', tags='indice_ganador')
+Canvas_menu.create_image(1120, 80, image=bmw_logo_, state=NORMAL, tags=['bwm', 'logo'])
+Canvas_menu.create_image(1120, 80, image=mercedes_logo_, state=HIDDEN, tags=['mercedes', 'logo'])
+Canvas_menu.create_image(1120, 80, image=audi_logo_, state=HIDDEN, tags=['audi', 'logo'])
+
+def change_logo(logo):
+    global audi_logo, mercedes_logo, bmw_logo
+    print(logo)
+    if (logo=='bwm'):
+        bmw_logo = True
+        mercedes_logo = False
+        audi_logo = False
+    if (logo=='audi'):
+        audi_logo = True
+        mercedes_logo = False
+        bmw_logo = False
+    if (logo=='mercedes'):
+        mercedes_logo= True
+        bmw_logo = False
+        audi_logo = False
+
+
+def escuderias():
+    global logo_running
+    index = 0
+    logos = [['bwm', 245], ['mercedes', 547], ['audi', 345]]
+    while True:
+        if not logo_running:
+            break
+        if index>2:
+            index = 0
+        Canvas_menu.itemconfig('logo', state=HIDDEN)
+        Canvas_menu.itemconfig(logos[index][0], state=NORMAL)
+        btn_logo.config(text=logos[index][0], command=lambda: change_logo(logos[index][0]))
+        Canvas_menu.itemconfig('indice_ganador', text= logos[index][1])
+        time.sleep(3)
+        index += 1
+
+
+logos = threading.Thread(target=escuderias)
+logos.start()
+
 
 
 def drivers_window():
     drivers = Toplevel()
-    drivers.minsize(1500, 800)
+    drivers.minsize(1500, 1013)
     drivers.resizable(width=NO, height=NO)
     drivers.title('Drivers')
 
     Canvas_drivers = Canvas(drivers, width=1500, height=800, bg='light blue')
     Canvas_drivers.place(x=0, y=0)
 
+    def editar_(indice):
+        global newlista
+        editar = Toplevel()
+        editar.minsize(700, 700)
+        editar.resizable(width=NO, height=NO)
+        editar.title('Editar')
 
-    hamilton = cargarImg('Hamilton_png')
+        Canvas_editar = Canvas(editar, width=700, height=700, bg='#E25D17')
+        Canvas_editar.place(x=0, y=0)
+
+        Canvas_editar.create_text(100, 90, text='Nombre', font=('Arial',20))
+        Canvas_editar.create_text(83, 200, text='Edad', font=('Arial',20))
+        Canvas_editar.create_text(130, 300, text='Nacionalidad', font=('Arial', 20))
+        Canvas_editar.create_text(100, 400, text='Posición', font=('Arial',20))
+        Canvas_editar.create_text(83, 500, text='RGP', font=('Arial', 20))
+        Canvas_editar.create_text(83, 600, text='REP', font=('Arial', 20))
+
+
+        Nombre = Entry(Canvas_editar, width= 30, font=('Arial',15))
+        Nombre.place(x=50, y=110)
+        Edad = Entry(Canvas_editar, width= 30, font=('Arial',15))
+        Edad.place(x=50, y=220)
+        Nacionalidad = Entry(Canvas_editar, width= 30, font=('Arial',15))
+        Nacionalidad.place(x=50, y=320)
+        Posición = Entry(Canvas_editar, width= 30, font=('Arial',15))
+        Posición.place(x=50, y=420)
+        REP = Entry(Canvas_editar, width= 30, font=('Arial',15))
+        REP.place(x=50, y=520)
+        RGP = Entry(Canvas_editar, width= 30, font=('Arial',15))
+        RGP.place(x=50, y=620)
+
+        Nombre.insert(0,str(newlista[indice][1]))
+        Edad.insert(0,str(newlista[indice][3]))
+        Nacionalidad.insert(0,str(newlista[indice][2]))
+        Posición.insert(0,str(newlista[indice][4]))
+        REP.insert(0,str(newlista[indice][5]))
+        RGP.insert(0,str(newlista[indice][6]))
 
 
 
+        def new_changes(indice):
+            global newlista
+            new_info = [newlista[indice][0], Nombre.get(),Nacionalidad.get(),Edad.get(),Posición.get(),REP.get(),RGP.get()]
+            newlista[indice] = new_info
+            with open('Drivers.txt','w') as file:
+                new_text = ('\n').join([','.join(drivers) for drivers in newlista])
+                file.write(new_text)
+                file.close()
+            editar.destroy()
+            update()
 
+        btn_save = Button(Canvas_editar,text='Save',font=('Arial',15), command=lambda:new_changes(indice))
+        btn_save.place(x=500, y=350)
+
+        editar.mainloop()
+
+
+    def ascendiente_aux(lista,ind):
+        num = len(lista)
+        for i in range(len(lista)):
+            for j in range(0,num-i-1):
+                if int(lista[j][ind]) >int(lista[j+1][ind]):
+                    temp = lista[j]
+                    lista[j] = lista[j+1]
+                    lista[j+1] = temp
+            
+        return lista
+
+
+    def descendiente_aux(lista):
+        return lista[::-1]
+
+    
 
     def recorrer():
+        global ascendiente, descendiente, indice, newlista
         with open('Drivers.txt', 'r') as file:
             lista = file.read().split('\n')
-            newlista = []
+            newlist = []
             count = 0
             while count < len(lista):
-                newlista += [lista[count].split(',')]
+                newlist += [lista[count].split(',')]
                 count += 1
             file.close()
-            return newlista
+            newlista = ascendiente_aux(newlist,indice)
+            if not ascendiente:
+                newlista= descendiente_aux(newlist)
+            print(newlista)
 
 
-    print(recorrer())
-
-    newlista = recorrer()
-
-
+    def create_lambda(X):
+        a = lambda: editar_(X)
+        return a
 
 
+    def cargarBotones(newlista_drivers):
+        global newlista,list_drivers
+            
+        
+        list_drivers= [cargarImg(newlista[0][0]),
+                    cargarImg(newlista[1][0]),
+                    cargarImg(newlista[2][0]),
+                    cargarImg(newlista[3][0]),
+                    cargarImg(newlista[4][0]),
+                    cargarImg(newlista[5][0]),
+                    cargarImg(newlista[6][0]),
+                    cargarImg(newlista[7][0]),
+                    cargarImg(newlista[8][0]),
+                    cargarImg(newlista[9][0])]
+
+        ind = 0
+        x = 150
+        for i in range(2):
+            y = 150
+            for j in range(5):
+                funcion = create_lambda(ind)
+                Button(Canvas_drivers, image=list_drivers[ind], command=funcion).place(x=x, y=y)
+                y += 125
+                ind += 1
+            x += 700
+
+
+    fondo = cargarImg('fondo_drivers.png')
+    def cargar():
+        global newlista
+
+        Canvas_drivers.delete('all')
+
+        Canvas_drivers.create_image(250, 300, image=fondo)
+        recorrer()
+        cargarBotones(newlista)
+
+        Canvas_drivers.create_text(310,135, text = 'Nombre', font=('Arial',15, 'bold'), fill='Red')
+        Canvas_drivers.create_text(1000, 135, text='Nombre', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_drivers.create_text(440,135, text = 'Edad', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_drivers.create_text(1100, 135, text='Edad', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_drivers.create_text(563, 135, text='Nacionalidad', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_drivers.create_text(1200, 135, text='Nacionalidad', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_drivers.create_text(665, 135, text='RPG', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_drivers.create_text(1305, 135, text='RPG', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_drivers.create_text(760, 135, text='REG', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_drivers.create_text(1400, 135, text='REP', font=('Arial', 15, 'bold'), fill='Red')
+
+        Canvas_drivers.create_text(310,200, text =newlista[0][1] ,font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(310, 320, text=newlista[1][1],font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(310, 440, text=newlista[2][1],font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(310, 560, text=newlista[3][1],font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(310, 690, text=newlista[4][1],font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1000, 200, text=newlista[5][1],font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1000, 320, text=newlista[6][1],font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1000, 440, text=newlista[7][1],font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1000, 560, text=newlista[8][1],font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1000, 690, text=newlista[9][1],font=('Arial',15,'bold'),justify=CENTER)
+
+        Canvas_drivers.create_text(440,200, text =newlista[0][3], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(440, 320, text= newlista[1][3], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(440, 440, text= newlista[2][3], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(440, 560, text= newlista[3][3], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(440, 690, text= newlista[4][3], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1100, 200, text=newlista[5][3], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1100, 320, text=newlista[6][3], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1100, 440, text=newlista[7][3], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1100, 560, text=newlista[8][3], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1100, 690, text=newlista[9][3], font=('Arial',15,'bold'),justify=CENTER)
+
+
+        Canvas_drivers.create_text(560,200, text = newlista[0][2], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(560, 320, text= newlista[1][2], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(560, 440, text= newlista[2][2], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(560, 560, text= newlista[3][2], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(560, 690, text= newlista[4][2], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1200, 200, text=newlista[5][2], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1200, 320, text=newlista[6][2], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1200, 440, text=newlista[7][2], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1200, 560, text=newlista[8][2], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1200, 690, text=newlista[9][2], font=('Arial',15,'bold'),justify=CENTER)
+
+
+        Canvas_drivers.create_text(660,200, text =newlista[0][5], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(660, 320, text=newlista[1][5], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(660, 440, text=newlista[2][5], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(660, 560, text=newlista[3][5], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(660, 690, text=newlista[4][5], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1300, 200, text=newlista[5][5], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1300, 320, text=newlista[6][5], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1300, 440, text=newlista[7][5], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1300, 560, text=newlista[8][5], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1300, 690, text=newlista[9][5], font=('Arial',15,'bold'),justify=CENTER)
+
+        Canvas_drivers.create_text(760,200, text =newlista[0][6], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(760, 320, text=newlista[1][6], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(760, 440, text=newlista[2][6], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(760, 560, text=newlista[3][6], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(760, 690, text=newlista[4][6], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1400, 200, text=newlista[5][6], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1400, 320, text=newlista[6][6], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1400, 440, text=newlista[7][6], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1400, 560, text=newlista[8][6], font=('Arial',15,'bold'),justify=CENTER)
+        Canvas_drivers.create_text(1400, 690, text=newlista[9][6], font=('Arial',15,'bold'),justify=CENTER)
+
+
+    cargar()
+
+    def update():
+        recorrer()
+        cargar()
+
+    def ascendiente():
+        global ascendiente, descendiente
+        if ascendiente:
+            descendiente = False
+        else:
+            ascendiente = True
+            descendiente = False
+            update()
+            
+
+    def descendiente():
+        global ascendiente,descendiente
+        if descendiente:
+            ascendiente = False
+        else:
+            ascendiente = False
+            descendiente = True
+            update()
+
+
+    
+    def RGP_():
+        global indice, RGP,REP
+        if RGP:
+            REP=False
+        else:
+            REP = False
+            RGP=True 
+            indice = 5
+            update()
+
+    def REP_():
+        global indice,RGP,REP
+        if REP:
+            RGP =False
+        else:
+            REP = True
+            RGP = False 
+            indice = 6
+            update() 
+            
+
+            
+
+    btn_ascendente = Button(Canvas_drivers, text='Ascendente',font=('Arial',15),command=ascendiente)
+    btn_ascendente.place(x=300, y=30)
+
+    btn_descendente = Button(Canvas_drivers, text='Decendente',font=('Arial',15),command=descendiente)
+    btn_descendente.place(x=450, y=30)
+
+    btn_RGP = Button(Canvas_drivers, text='RGP',font=('Arial',15),command=RGP_)
+    btn_RGP.place(x=700, y=30)
+
+    btn_REG = Button(Canvas_drivers, text='REP',font=('Arial',15),command=REP_)
+    btn_REG.place(x=800, y=30)
+       
 
     def back():
         drivers.withdraw()
         drivers_cars_window()
 
-    btn_back = Button(Canvas_drivers, text='Back', command=back)
-    btn_back.place(x=500, y=500)
-
+    btn_back = Button(Canvas_drivers, text='Back',font=('Arial',15),command=back)
+    btn_back.place(x=50, y=30)
+    
     drivers.mainloop()
+
 
 
 def cars_window():
     cars = Toplevel()
-    cars.minsize(1500, 800)
+    cars.minsize(1000, 900)
     cars.resizable(width=NO, height=NO)
     cars.title('Cars')
 
-    Canvas_cars = Canvas(cars, width=1500, height=800, bg='light blue')
+    Canvas_cars = Canvas(cars, width=1000, height=900, bg='light blue')
     Canvas_cars.place(x=0, y=0)
+
+    def editar(indice):
+        global newlista_cars
+        editar = Toplevel()
+        editar.minsize(700, 500)
+        editar.resizable(width=NO, height=NO)
+        editar.title('Editar')
+
+        Canvas_editar = Canvas(editar, width=700, height=700, bg='#E25D17')
+        Canvas_editar.place(x=0, y=0)
+
+        Canvas_editar.create_text(80, 50, text='Marca', font=('Arial', 20))
+        Canvas_editar.create_text(83, 180, text='Modelo', font=('Arial', 20))
+        Canvas_editar.create_text(100, 280, text='Temporada', font=('Arial', 20))
+        Canvas_editar.create_text(100, 380, text='Eficiencia', font=('Arial', 20))
+
+
+        Marca = Entry(Canvas_editar, width=30, font=('Arial', 15))
+        Marca.place(x=40, y=80)
+        Modelo = Entry(Canvas_editar, width=30, font=('Arial', 15))
+        Modelo.place(x=40, y=200)
+        Temporada = Entry(Canvas_editar, width=30, font=('Arial', 15))
+        Temporada.place(x=40, y=300)
+        Eficiencia = Entry(Canvas_editar, width=30, font=('Arial', 15))
+        Eficiencia.place(x=40, y=400)
+
+        Marca.insert(0, str(newlista_cars[indice][1]))
+        Modelo.insert(0, str(newlista_cars[indice][2]))
+        Temporada.insert(0, str(newlista_cars[indice][3]))
+        Eficiencia.insert(0, str(newlista_cars[indice][4]))
+
+
+        def new_changes():
+            global newlista_cars
+            newlista_cars[indice] = [newlista_cars[indice][0], Marca.get(), Modelo.get(), Temporada.get(), Eficiencia.get()]
+            with open('Cars.txt','w') as file:
+                newlista = ('\n').join([(',').join(cars) for cars in newlista_cars])
+                file.write(newlista)
+            file.close()
+            editar.destroy()
+            update()
+
+
+        btn_save = Button(Canvas_editar, text='Save', font=('Arial', 12), command=new_changes)
+        btn_save.place(x=500, y=300)
+
+
+
+
+    def ascendiente(newlista):
+        print(newlista)
+        leen = len(newlista)
+        for i in range(leen):
+            for j in range(leen-i-1):
+                if (int(newlista[j][4])< int(newlista[j+1][4])):
+                    tem = newlista[j]
+                    newlista[j] = newlista[j+1]
+                    newlista[j+1] = tem
+        return newlista
+
+    def descendiente(newlista):
+        return newlista[::-1]
+
+
+    def recorrer():
+        global newlista_cars, ascendiente_cars
+        with open('Cars.txt', 'r') as file:
+            lista = file.read().split('\n')
+            newlista = []
+            count = 0
+            while count<len(lista):
+                newlista += [lista[count].split(',')]
+                count +=1
+        file.close()
+        newlista_cars = ascendiente(newlista)
+        if not ascendiente_cars:
+            newlista_cars = descendiente(newlista)
+
+    def crear_lambda(indice):
+        return lambda: editar(indice)
+
+    def cargar_botones(newlista_cars):
+        global lista_cars
+
+        lista_cars = [cargarImg(newlista_cars[0][0]),
+                      cargarImg(newlista_cars[1][0]),
+                      cargarImg(newlista_cars[2][0]),
+                      cargarImg(newlista_cars[3][0]),
+                      cargarImg(newlista_cars[4][0]),
+                      cargarImg(newlista_cars[5][0]),
+                      cargarImg(newlista_cars[6][0]),
+                      cargarImg(newlista_cars[7][0]),
+                      cargarImg(newlista_cars[8][0]),
+                      cargarImg(newlista_cars[9][0])]
+
+        indice = 0
+        y = 70
+        for i in range(10):
+            funcion = crear_lambda(indice)
+            Button(Canvas_cars, image=lista_cars[indice], command=funcion).place(x=200, y=y)
+            y += 75
+            indice += 1
+
+    background = cargarImg('fondo_drivers.png')
+    def cargar():
+        global newlista_carss
+
+        Canvas_cars.delete('all')
+
+        Canvas_cars.create_image(200,300, image= background)
+
+        recorrer()
+
+        cargar_botones(newlista_cars)
+
+
+        Canvas_cars.create_text(420, 50, text='Marca', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_cars.create_text(600, 50, text='Modelo', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_cars.create_text(750, 50, text= 'Season', font=('Arial', 15, 'bold'), fill='Red')
+        Canvas_cars.create_text(900, 50, text='Eficiciencia', font=('Arial', 15, 'bold'), fill='Red')
+
+        Canvas_cars.create_text(420, 85, text=newlista_cars[0][1],font=('Arial',15,'bold'))
+        Canvas_cars.create_text(420, 165, text=newlista_cars[1][1], font=('Arial',15,'bold'))
+        Canvas_cars.create_text(420, 240, text=newlista_cars[2][1], font=('Arial',15,'bold'))
+        Canvas_cars.create_text(420, 310, text=newlista_cars[3][1], font=('Arial',15,'bold'))
+        Canvas_cars.create_text(420, 390, text=newlista_cars[4][1], font=('Arial',15,'bold'))
+        Canvas_cars.create_text(420, 470, text=newlista_cars[5][1], font=('Arial',15,'bold'))
+        Canvas_cars.create_text(420, 540, text=newlista_cars[6][1], font=('Arial',15,'bold'))
+        Canvas_cars.create_text(420, 610, text=newlista_cars[7][1], font=('Arial',15,'bold'))
+        Canvas_cars.create_text(420, 690, text=newlista_cars[8][1], font=('Arial',15,'bold'))
+        Canvas_cars.create_text(420, 760, text=newlista_cars[9][1], font=('Arial',15,'bold'))
+
+        Canvas_cars.create_text(600, 85, text=newlista_cars[0][2], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(600, 165, text=newlista_cars[1][2], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(600, 240, text=newlista_cars[2][2], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(600, 310, text=newlista_cars[3][2], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(600, 390, text=newlista_cars[4][2], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(600, 470, text=newlista_cars[5][2], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(600, 540, text=newlista_cars[6][2], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(600, 610, text=newlista_cars[7][2], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(600, 690, text=newlista_cars[8][2], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(600, 760, text=newlista_cars[9][2], font=('Arial', 15, 'bold'))
+
+        Canvas_cars.create_text(750, 85, text=newlista_cars[0][3], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(750, 165, text=newlista_cars[1][3], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(750, 240, text=newlista_cars[2][3], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(750, 310, text=newlista_cars[3][3], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(750, 390, text=newlista_cars[4][3], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(750, 470, text=newlista_cars[5][3], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(750, 540, text=newlista_cars[6][3], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(750, 610, text=newlista_cars[7][3], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(750, 690, text=newlista_cars[8][3], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(750, 760, text=newlista_cars[9][3], font=('Arial', 15, 'bold'))
+
+        Canvas_cars.create_text(900, 85, text=newlista_cars[0][4], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(900, 165, text=newlista_cars[1][4], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(900, 240, text=newlista_cars[2][4], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(900, 310, text=newlista_cars[3][4], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(900, 390, text=newlista_cars[4][4], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(900, 470, text=newlista_cars[5][4], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(900, 540, text=newlista_cars[6][4], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(900, 610, text=newlista_cars[7][4], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(900, 690, text=newlista_cars[8][4], font=('Arial', 15, 'bold'))
+        Canvas_cars.create_text(900, 760, text=newlista_cars[9][4], font=('Arial', 15, 'bold'))
+
+
+    cargar()
+
+    def update():
+        global newlista_cars
+        recorrer()
+        cargar()
+
+    def ascendiente_():
+        global ascendiente_cars, descendiente_cars
+        if ascendiente_cars:
+            descendiente_cars = False
+            update()
+        else:
+            ascendiente_cars = True
+            descendiente_cars = False
+            update()
+
+    def descendiente_():
+        global ascendiente_cars, descendiente_cars
+        if descendiente_cars:
+            ascendiente_cars = False
+            update()
+        else:
+            descendiente_cars = True
+            ascendiente_cars = False
+            update()
+
+
+
+    btn_ascendiente = Button(Canvas_cars ,text='Ascendiente', font=('Arial',15), command= ascendiente_)
+    btn_ascendiente.place(x=20, y=300)
+
+    btn_ascendiente = Button(Canvas_cars, text='Descendiente', font=('Arial', 15), command=descendiente_)
+    btn_ascendiente.place(x=20, y=500)
+
+
 
     def back():
         cars.withdraw()
         drivers_cars_window()
 
-    btn_back = Button(Canvas_cars, text='Back', command=back)
-    btn_back.place(x=500, y=500)
+    btn_back = Button(Canvas_cars, text='Back', font=('Arial', 15), command=back)
+    btn_back.place(x=20, y=700)
 
     cars.mainloop()
 
@@ -308,7 +812,6 @@ def command_display():
 
     def back():
         command.withdraw()
-        test_driver()
 
     btn_back = Button(Canvas_commands, text='Back', font=('Magneto', 15), command=back)
     btn_back.place(x=20, y=400)
@@ -318,6 +821,7 @@ def command_display():
 
     btn_zigzag = Button(Canvas_commands, text='ZigZag', font=('Magneto', 15), relief='sunken', borderwidth=3, command=lambda: send_command('ZigZag'))
     btn_zigzag.place(x=278, y=120)
+
 
     btn_infinite = Button(Canvas_commands, text='Infnite', font=('Magneto', 15), relief='sunken', borderwidth=3, command=lambda: send_command('Infinite'))
     btn_infinite.place(x=70, y=230)
@@ -802,6 +1306,20 @@ def test_driver():
         else:
             print("A blinking light is already on")
 
+    Canvas_test.create_image(1000, 370, tags='Escuderia')
+
+    def change_escuderia():
+        global audi_logo, mercedes_logo, bwm_logo
+        if audi_logo:
+            Canvas_test.itemconfig('Escuderia', image=audi_logo_)
+        if mercedes_logo:
+            Canvas_test.itemconfig('Escuderia', image=mercedes_logo_)
+        if bmw_logo:
+            Canvas_test.itemconfig('Escuderia', image=bmw_logo_)
+
+    change_escuderia()
+
+
 
     def celebration():
         global Driver1, Driver2
@@ -814,7 +1332,6 @@ def test_driver():
     test.bind('e', lights)
 
     def commands():
-        test.destroy()
         command_display()
 
     def volver_menu():
@@ -840,6 +1357,8 @@ def test_driver():
 
 
 def quit_menu():
+    global logo_running
+    logo_running = False
     root.destroy()
     off()
 
@@ -855,5 +1374,9 @@ btn_drivers_cars.place(x=772, y=177)
 
 btn_drivers = Button(Canvas_menu, image=image_quit, bg='black', fg='black', command=quit_menu)
 btn_drivers.place(x=1066, y=177)
+
+btn_logo = Button(Canvas_menu, text='', font=('Magneto', 15, 'bold'), bg='#2B5438', fg='white', command=lambda:change_logo(''))
+btn_logo.place(x=870, y=110)
+
 
 root.mainloop()
