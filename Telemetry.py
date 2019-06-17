@@ -99,7 +99,6 @@ Canvas_menu.create_image(1120, 80, image=audi_logo_, state=HIDDEN, tags=['audi',
 
 def change_logo(logo):
     global audi_logo, mercedes_logo, bmw_logo
-    print(logo)
     if (logo=='bwm'):
         bmw_logo = True
         mercedes_logo = False
@@ -194,7 +193,7 @@ def drivers_window():
                 file.write(new_text)
                 file.close()
             editar.destroy()
-            update()
+            cargar()
 
         btn_save = Button(Canvas_editar,text='Save',font=('Arial',15), command=lambda:new_changes(indice))
         btn_save.place(x=500, y=350)
@@ -348,9 +347,6 @@ def drivers_window():
 
     cargar()
 
-    def update():
-        recorrer()
-        cargar()
 
     def ascendiente():
         global ascendiente, descendiente
@@ -359,7 +355,7 @@ def drivers_window():
         else:
             ascendiente = True
             descendiente = False
-            update()
+            cargar()
             
 
     def descendiente():
@@ -369,7 +365,7 @@ def drivers_window():
         else:
             ascendiente = False
             descendiente = True
-            update()
+            cargar()
 
 
     
@@ -381,7 +377,7 @@ def drivers_window():
             REP = False
             RGP=True 
             indice = 5
-            update()
+            cargar()
 
     def REP_():
         global indice,RGP,REP
@@ -391,7 +387,7 @@ def drivers_window():
             REP = True
             RGP = False 
             indice = 6
-            update() 
+            cargar() 
             
 
             
@@ -1060,14 +1056,12 @@ def test_driver():
     def sense_screen(luminosidad):
         if luminosidad == "1":
             print('luz')
-            myCar.send('lf:0;')
             Canvas_test.itemconfig('bright', state=HIDDEN)
             Canvas_test.itemconfig('no_bright', state=NORMAL)
             Canvas_test.itemconfig('sun_brightless', state=HIDDEN)
             Canvas_test.itemconfig('sun_bright', state=NORMAL)
         else:
             print('No hay luz')
-            myCar.send('lf:1;')
             Canvas_test.itemconfig('sun_brightless', state=NORMAL)
             Canvas_test.itemconfig('sun_bright', state=HIDDEN)
             Canvas_test.itemconfig('no_bright', state=HIDDEN)
@@ -1075,8 +1069,8 @@ def test_driver():
 
     """Inicio de thread para el comando sense"""
 
-    # sense_thread = threading.Thread(target=sense)
-    # sense_thread.start()
+    sense_thread = threading.Thread(target=sense)
+    sense_thread.start()
 
     ############# Potencia del motor #################
 
