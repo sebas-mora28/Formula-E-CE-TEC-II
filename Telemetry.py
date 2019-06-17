@@ -27,6 +27,7 @@ import threading  # Thread
 import winsound  # Reproducir musica
 from tkinter import messagebox
 
+
 global Driver1, Driver2, Car1, Car2, list_drivers,RGP,REP,descendiente, ascendiente,indice,newlista, newlista_cars, lista_cars, logo_running, bwm_logo, mercedes_logo, audi_logo, ascendiente_cars, descendiente_cars
 Driver1, Driver2, Car1, Car2 = False, False, False, False
 newlista=[]
@@ -98,6 +99,7 @@ Canvas_menu.create_image(1120, 80, image=mercedes_logo_, state=HIDDEN, tags=['me
 Canvas_menu.create_image(1120, 80, image=audi_logo_, state=HIDDEN, tags=['audi', 'logo'])
 
 def change_logo(logo):
+    """Funcion que permite cambiar la escuderia en la pantalla de menu"""
     global audi_logo, mercedes_logo, bmw_logo
     if (logo=='bwm'):
         bmw_logo = True
@@ -114,6 +116,8 @@ def change_logo(logo):
 
 
 def escuderias():
+    """Funcion que permite mostrar los diferentes logos de las escuderías para ser
+    elegidos desde el menu"""
     global logo_running
     index = 0
     logos = [['bwm', 245], ['mercedes', 547], ['audi', 345]]
@@ -136,6 +140,7 @@ logos.start()
 
 
 def drivers_window():
+    """Pantalla de la tabla de posiciones de los pilotos"""
     drivers = Toplevel()
     drivers.minsize(1500, 1013)
     drivers.resizable(width=NO, height=NO)
@@ -145,6 +150,7 @@ def drivers_window():
     Canvas_drivers.place(x=0, y=0)
 
     def editar_(indice):
+        """Funcion que abre una pantalla y permite editar los datos de los pilotos"""
         global newlista
         editar = Toplevel()
         editar.minsize(700, 700)
@@ -174,7 +180,9 @@ def drivers_window():
         REP.place(x=50, y=520)
         RGP = Entry(Canvas_editar, width= 30, font=('Arial',15))
         RGP.place(x=50, y=620)
-
+        
+        """Se inserta los datos prederminados en el caso en que solamente se realice cambios a
+        solamente uno de las opciones la lista no quede en blanco"""
         Nombre.insert(0,str(newlista[indice][1]))
         Edad.insert(0,str(newlista[indice][3]))
         Nacionalidad.insert(0,str(newlista[indice][2]))
@@ -185,6 +193,7 @@ def drivers_window():
 
 
         def new_changes(indice):
+            """Funcion que guarda los nuevos cambios efectuados en la pantalla edit"""
             global newlista
             new_info = [newlista[indice][0], Nombre.get(),Nacionalidad.get(),Edad.get(),Posición.get(),REP.get(),RGP.get()]
             newlista[indice] = new_info
@@ -219,27 +228,27 @@ def drivers_window():
     
 
     def recorrer():
+        """Funcion que lee el txt y lo convierte a una matriz"""
         global ascendiente, descendiente, indice, newlista
         with open('Drivers.txt', 'r') as file:
             lista = file.read().split('\n')
             newlist = []
-            count = 0
-            while count < len(lista):
-                newlist += [lista[count].split(',')]
-                count += 1
+            index = 0
+            while index < len(lista):
+                newlist += [lista[index].split(',')]
+                index += 1
             file.close()
             newlista = ascendiente_aux(newlist,indice)
             if not ascendiente:
                 newlista= descendiente_aux(newlist)
-            print(newlista)
-
 
     def create_lambda(X):
-        a = lambda: editar_(X)
-        return a
+        funcion = lambda: editar_(X)
+        return funcion
 
 
     def cargarBotones(newlista_drivers):
+        """Funcion que carga los botones cada vez que es llamada"""
         global newlista,list_drivers
             
         
@@ -268,6 +277,8 @@ def drivers_window():
 
     fondo = cargarImg('fondo_drivers.png')
     def cargar():
+        """Elimina todos los elementos que hay en el canvas y los vuelve a implementar
+        con los datos actualizados"""
         global newlista
 
         Canvas_drivers.delete('all')
@@ -417,6 +428,7 @@ def drivers_window():
 
 
 def cars_window():
+    """Pantalla de la tabla de posiciones de los carros"""
     cars = Toplevel()
     cars.minsize(1000, 900)
     cars.resizable(width=NO, height=NO)
@@ -426,6 +438,7 @@ def cars_window():
     Canvas_cars.place(x=0, y=0)
 
     def editar(indice):
+        """Funcion que abre una pantalla y permite editar los datos de los pilotos"""
         global newlista_cars
         editar = Toplevel()
         editar.minsize(700, 500)
@@ -457,6 +470,7 @@ def cars_window():
 
 
         def new_changes():
+            """Funcion que guarda los cambios efectuados"""
             global newlista_cars
             newlista_cars[indice] = [newlista_cars[indice][0], Marca.get(), Modelo.get(), Temporada.get(), Eficiencia.get()]
             with open('Cars.txt','w') as file:
@@ -474,7 +488,6 @@ def cars_window():
 
 
     def ascendiente(newlista):
-        print(newlista)
         leen = len(newlista)
         for i in range(leen):
             for j in range(leen-i-1):
@@ -489,6 +502,7 @@ def cars_window():
 
 
     def recorrer():
+        """Lee el txt y lo convierte en una matriz"""
         global newlista_cars, ascendiente_cars
         with open('Cars.txt', 'r') as file:
             lista = file.read().split('\n')
@@ -529,6 +543,8 @@ def cars_window():
 
     background = cargarImg('fondo_drivers.png')
     def cargar():
+        """Funcion que elimina todos los elementos del canvas y los vuelve a implementar
+        con los datos actualizados"""
         global newlista_carss
 
         Canvas_cars.delete('all')
@@ -592,30 +608,26 @@ def cars_window():
 
     cargar()
 
-    def update():
-        global newlista_cars
-        recorrer()
-        cargar()
 
     def ascendiente_():
         global ascendiente_cars, descendiente_cars
         if ascendiente_cars:
             descendiente_cars = False
-            update()
+            cargar()
         else:
             ascendiente_cars = True
             descendiente_cars = False
-            update()
+            cargar()
 
     def descendiente_():
         global ascendiente_cars, descendiente_cars
         if descendiente_cars:
             ascendiente_cars = False
-            update()
+            cargar()
         else:
             descendiente_cars = True
             ascendiente_cars = False
-            update()
+            cargar()
 
 
 
@@ -638,6 +650,7 @@ def cars_window():
 
 
 def drivers_cars_window():
+    """Pantalla que permite elegir cual de las tablas de posiciones desea ver"""
     root.withdraw()
     driverscars = Toplevel()
     driverscars.minsize(1000, 500)
@@ -681,6 +694,7 @@ def drivers_cars_window():
 
 
 def about():
+    """Pnatalla que muestra informacion acerca del proyecto"""
     root.withdraw()
     about = Toplevel()
     about.minsize(1000, 500)
@@ -709,6 +723,7 @@ def about():
 
 
 def choose():
+    """Pantalla que permite elegir el piloto y el auto a mostrar en el test drive"""
     root.withdraw()
     choose = Toplevel()
     choose.minsize(1000, 600)
@@ -780,6 +795,8 @@ def choose():
 
 
 def command_display():
+    """Funcion que abre una pantalla donde se puede elegir entre los diferentes
+    comandos disponibles"""
     command = Toplevel()
     command.minsize(500, 500)
     command.resizable(width=NO, height=NO)
@@ -1051,7 +1068,7 @@ def test_driver():
                     print(mnsSend)
                     sense_screen(mnsSend)
                 indice += 1
-            time.sleep(10)
+            time.sleep(25)
 
     def sense_screen(luminosidad):
         if luminosidad == "1":
