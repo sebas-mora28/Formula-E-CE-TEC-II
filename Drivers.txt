@@ -1,10 +1,10 @@
-Ocon.png,Juan,hondureño,36,8,214,233
-Alonso.png,Alonso,español,40,54,254,233
-Ricciardo.png,Sebastian ,brasileño,28,5,741,243
 Hamilton_driver.png,Hamilton,alemán,26,1,200,254
+Ocon.png,Juan,hondureño,36,8,214,233
+Kimi.png,Kimi,frances,28,8,231,412
 Max.png,Max,sueco,28,3,240,270
 Vettel.png,Vettel,suizo,34,2,240,270
-Vandoorne.png,Oscar Arias,francés,35,9,251,352
-Kimi.png,Kimi,frances,28,8,231,412
-Bottas.png,Bottas,italiano,23,4,631,412
 Pérez.png,Pérez,mexicano,23,7,245,632
+Vandoorne.png,Oscar Arias,francés,35,9,251,352
+Alonso.png,Alonso,español,40,54,254,233
+Bottas.png,Bottas,italiano,23,4,631,412
+Ricciardo.png,Sebastian ,brasileño,28,5,741,243

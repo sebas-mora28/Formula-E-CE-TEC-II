@@ -363,6 +363,7 @@ def drivers_window():
         global ascendiente, descendiente
         if ascendiente:
             descendiente = False
+            cargar()
         else:
             ascendiente = True
             descendiente = False
@@ -373,6 +374,7 @@ def drivers_window():
         global ascendiente,descendiente
         if descendiente:
             ascendiente = False
+            cargar()
         else:
             ascendiente = False
             descendiente = True
@@ -384,6 +386,7 @@ def drivers_window():
         global indice, RGP,REP
         if RGP:
             REP=False
+            cargar()
         else:
             REP = False
             RGP=True 
@@ -394,6 +397,7 @@ def drivers_window():
         global indice,RGP,REP
         if REP:
             RGP =False
+            cargar()
         else:
             REP = True
             RGP = False 
