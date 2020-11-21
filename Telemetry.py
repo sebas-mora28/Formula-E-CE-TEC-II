@@ -24,7 +24,6 @@ from WiFiClient import NodeMCU  # NodeCMU
 import time  # time.sleep()
 import os  # path()
 import threading  # Thread
-import winsound  # Reproducir musica
 from tkinter import messagebox
 
 
@@ -75,16 +74,6 @@ image_about = cargarImg('About.png')
 image_drivers = cargarImg('Drivers.png')
 image_quit = cargarImg('Quit.png')
 
-
-def cargar_cancion(Nombre):
-    # Funcion para cargar canciones del juego
-    winsound.PlaySound(Nombre, winsound.SND_ASYNC + winsound.SND_LOOP)
-
-
-def off():
-    # Funcion que apaga la cancion una vez que entre a cualquiera de las demas pantallas
-    winsound.PlaySound(None, winsound.SND_ASYNC + winsound.SND_LOOP)
-cargar_cancion('menu_song.wav')
 
 
 bmw_logo_ = cargarImg('bmw_logo.png')
